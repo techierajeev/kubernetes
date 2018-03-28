@@ -1,0 +1,18 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: mypv
+  labels:
+    volume-type: "gfs"
+spec:
+  storageClassName: demo
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteMany
+  glusterfs:
+    path: gvol
+    endpoints: glusterfs-cluster
+    readOnly: false
+
+
