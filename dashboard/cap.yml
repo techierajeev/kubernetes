@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: cap-admin
+  namespace: cap-training
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: cap-admin
+  namespace: cap-training
+subjects:
+- kind: ServiceAccount
+  name: cap-admin
+  namespace: cap-training
+roleRef:
+  kind: Role
+  name: cap-admin
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  apiVersion: rbac.authorization.k8s.io/v1beta1
+  metadata:
+    namespace: cap-training
+    name: cap-admin
+  rules:
+  - apiGroups: ["*"]
+    resources: ["*"]
+    verbs: ["*"]
+
