@@ -1,0 +1,32 @@
+                protocol: TCP
+              - containerPort: 8888
+                protocol: TCP
+            resources: {}
+            terminationMessagePath: /dev/termination-log
+            terminationMessagePolicy: File
+            volumeMounts:
+              - mountPath: /mnt
+                name: volume-twrt6
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+          - name: volume-twrt6
+            persistentVolumeClaim:
+              claimName: abhutad-test-storage
+    test: false
+    triggers:
+      - type: ConfigChange
+      - imageChangeParams:
+          automatic: true
+          containerNames:
+            - abhutad-2
+          from:
+            kind: ImageStreamTag
+            name: 'abhutad-2:2'
+            namespace: abhutad-test
+          lastTriggeredImage: >-
+            nexusdev.discoverfinancial.com:18082/abhutad-jupyterhub/abhutad@sha256:cec5a30cf775e97f70187cc3cd8546dfbc6a8f4080087d2459cae9b7e4dad101
+        type: ImageChange
