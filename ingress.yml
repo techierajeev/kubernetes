@@ -1,0 +1,33 @@
+{
+  "kind": "Ingress",
+  "apiVersion": "extensions/v1beta1",
+  "metadata": {
+    "name": "services-ingress",
+    "namespace": "qc",
+    "labels": {
+      "name": "svc"
+    },
+      "kubernetes.io/ingress.class": "traefik"
+    }
+  },
+  "spec": {
+    "rules": [
+      {
+        "http": {
+          "paths": [
+            {
+              "path": "/ui",
+              "backend": {
+                "serviceName": "uiservice",
+                "servicePort": 80
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "status": {
+    "loadBalancer": {}
+  }
+}
