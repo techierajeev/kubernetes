@@ -1,0 +1,81 @@
+{
+  "kind": "Deployment",
+  "apiVersion": "extensions/v1beta1",
+  "metadata": {
+    "name": "traefik-ingress-controller-svc",
+    "namespace": "qc",
+    "labels": {
+      "k8s-app": "traefik-ingress-lb-svc"
+    },
+  },
+  "spec": {
+    "replicas": 3,
+    "selector": {
+      "matchLabels": {
+        "k8s-app": "traefik-ingress-lb-svc",
+        "name": "traefik-ingress-lb-svc"
+      }
+    },
+    "template": {
+      "metadata": {
+        "creationTimestamp": null,
+        "labels": {
+          "k8s-app": "traefik-ingress-lb-svc",
+          "name": "traefik-ingress-lb-svc"
+        }
+      },
+      "spec": {
+        "containers": [
+          {
+            "name": "traefik-ingress-lb-svc",
+            "image": "traefik",
+            "args": [
+              "--web",
+              "--web.address=:8081",
+              "--kubernetes",
+              "--logLevel=ERROR",
+              "--kubernetes.labelselector=name=svc",
+              "--accesslogsfile=/home/admin/access.log"
+            ],
+            "ports": [
+              {
+                "name": "http",
+                "containerPort": 80,
+                "protocol": "TCP"
+              },
+              {
+                "name": "admin",
+                "containerPort": 8081,
+                "protocol": "TCP"
+              }
+            ],
+            "resources": {
+              "limits": {
+                "cpu": "700m",
+                "memory": "900Mi"
+              },
+              "requests": {
+                "cpu": "700m",
+                "memory": "900Mi"
+              }
+            },
+            "terminationMessagePath": "/dev/termination-log",
+            "terminationMessagePolicy": "File",
+            "imagePullPolicy": "Always",
+            "securityContext": {
+              "privileged": true
+            }
+          }
+        ],
+        "restartPolicy": "Always",
+        "terminationGracePeriodSeconds": 60,
+        "dnsPolicy": "ClusterFirst",
+        "serviceAccountName": "traefik-ingress",
+        "serviceAccount": "traefik-ingress",
+        "securityContext": {},
+        "schedulerName": "default-scheduler"
+      }
+    },
+    }
+  },
+}
